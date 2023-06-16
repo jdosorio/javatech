@@ -4,7 +4,7 @@ Este proyecto fue creado para dar solucion a la prueba tecnica alojada en el sig
 el cual tambien cuenta con un front alojado en la siguiente direccion https://javatechfront-git-main-jdosorio.vercel.app/ y del cual el repositorio se enuentra en https://github.com/jdosorio/javatechfront
 
 El proyecto se desplego en Aws ElasticBeanStalk mediante una pipeline https://github.com/jdosorio/javatech/actions 
-Se integro sonarcloud con el fin de pasar el codigo por pruebas de coverage, seguridad y demas opciones, dichas opciones tambien estan en la pipeline de despliegue. En los actions se encuentran los artefactos que se generan al hacer push al proyecto asi como el codigo correspondiente para moverlo a aws.
+Se integro sonarcloud https://sonarcloud.io/summary/overall?id=jdosorio_javatech con el fin de pasar el codigo por pruebas de coverage, seguridad y demas opciones, dichas opciones tambien estan en la pipeline de despliegue. En los actions se encuentran los artefactos que se generan al hacer push al proyecto asi como el codigo correspondiente para moverlo a aws.
 
 Tiene configurado el endpoint /api/calculo el cual acepta peticiones get y post y puede usarse mediante clientes como postman con el siguiente objeto 
 {
