@@ -13,6 +13,7 @@ public class CalculoController {
     @Autowired
     CalculoService calculoService;
 
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/api/calculo", method = { RequestMethod.GET, RequestMethod.POST })
     @ResponseBody
     public ResponseEntity<ResponseModel> calcular(@RequestBody RequestModel requestModel) {
