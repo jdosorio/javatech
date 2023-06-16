@@ -27,6 +27,6 @@ public class CalculoController {
 
     @GetMapping("/")
     public String index() {
-        return "HEALTH CHECK OK!Bienvenido a la prueba tecnica";
+        return "HEALTH CHECK OK! Bienvenido a la prueba tecnica";
     }
 }
