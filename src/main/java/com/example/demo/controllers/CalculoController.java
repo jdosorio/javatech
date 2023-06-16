@@ -24,4 +24,9 @@ public class CalculoController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/")
+    public String index() {
+        return "HEALTH CHECK OK!Bienvenido a la prueba tecnica";
+    }
 }
