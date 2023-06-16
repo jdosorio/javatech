@@ -15,7 +15,8 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
+  tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
 
     steps:
