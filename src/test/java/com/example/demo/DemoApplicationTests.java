@@ -1,27 +1,44 @@
 package com.example.demo;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.demo.models.RequestModel;
+import com.example.demo.services.CalculoService;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import org.springframework.http.MediaType;
 
+// Clase que implementa test en la aplicacion, tanto de integracion como unitarios
 @SpringBootTest
 @AutoConfigureMockMvc
 class DemoApplicationTests {
 
+	// Se usa mockMvc con el fin de simular la peticion
 	@Autowired
 	private MockMvc mockMvc;
-
+	// Se usa para mapear al objeto que se necesite
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	private CalculoService calculoService;
+
+	@BeforeEach
+	public void setUp() {
+		calculoService = new CalculoService();
+	}
+
+	// INICIO PRUEBAS INTEGRACION
+	// Test para verificar n:187, x:10, y:5 que el resultado sea 184, el cual
+	// proviene del atributo data del ResponseModel
 	@Test
 	void shouldTestOne() throws Exception {
 		RequestModel requestModel = new RequestModel();
@@ -36,6 +53,8 @@ class DemoApplicationTests {
 				.andDo(print());
 	}
 
+	// Test para verificar n:15, x:10, y:5 que el resultado sea 15, el cual
+	// proviene del atributo data del ResponseModel
 	@Test
 	void shouldTestTwo() throws Exception {
 		RequestModel requestModel = new RequestModel();
@@ -50,4 +69,56 @@ class DemoApplicationTests {
 				.andDo(print());
 	}
 
+	// FIN PRUEBAS INTEGRACION
+
+	// INICIO PRUEBAS UNITARIAS
+	@Test
+	// Caso de prueba : Expresion mayor que N
+	public void shouldExpressionGreaterThanN() {
+		int n = 10;
+		int x = 3;
+		int y = 2;
+		int expected = n - n % x - (x - y);
+		int result = calculoService.getCalculo(n, x, y);
+		Assertions.assertEquals(expected, result);
+	}
+
+	@Test
+	// Caso de prueba : Expresion menor que N
+	public void shouldExpressionLessThanN() {
+		int n = 15;
+		int x = 4;
+		int y = 3;
+		int expected = n - n % x + y;
+		int result = calculoService.getCalculo(n, x, y);
+		Assertions.assertEquals(expected, result);
+	}
+
+	@Test
+	// Caso de prueba : cálculo fuera del rango válido
+	public void shouldOutOfRange() {
+		int n = 5;
+		int x = 2;
+		int y = 4;
+		int expected = -1;
+
+		int result = calculoService.getCalculo(n, x, y);
+
+		Assertions.assertEquals(expected, result);
+	}
+
+	@Test
+	// Caso de prueba : Cuando "x" es cero, escenario que de no controlarse
+	// romperia nuestra logica
+	public void shouldXIsZero() {
+		int n = 5;
+		int x = 0;
+		int y = 4;
+		int expected = -1;
+
+		int result = calculoService.getCalculo(n, x, y);
+
+		Assertions.assertEquals(expected, result);
+	}
+	// FIN PRUEBAS UNITARIAS
 }
