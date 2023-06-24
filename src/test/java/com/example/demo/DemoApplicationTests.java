@@ -3,19 +3,39 @@ package com.example.demo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.demo.controllers.CalculoController;
 import com.example.demo.models.RequestModel;
+import com.example.demo.models.ResponseModel;
 import com.example.demo.services.CalculoService;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 // Clase que implementa test en la aplicacion, tanto de integracion como unitarios
 @SpringBootTest
@@ -30,6 +50,9 @@ class DemoApplicationTests {
 	private ObjectMapper objectMapper;
 
 	private CalculoService calculoService;
+
+	@InjectMocks
+	BindingResult bindingResultMock = mock(BindingResult.class);
 
 	@BeforeEach
 	public void setUp() {
@@ -67,6 +90,18 @@ class DemoApplicationTests {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.data").value(15))
 				.andDo(print());
+	}
+
+	@Test
+	void shouldHealthCheck() throws Exception {
+		// Realiza la solicitud GET al endpoint "/"
+		ResultActions resultActions = mockMvc.perform(get("/"));
+
+		// Verifica que se haya devuelto el código de estado 200 OK
+		resultActions.andExpect(status().isOk());
+
+		// Verifica que el cuerpo de la respuesta contenga el mensaje esperado
+		resultActions.andExpect(content().string("HEALTH CHECK OK! Bienvenido a la prueba tecnica"));
 	}
 
 	// FIN PRUEBAS INTEGRACION
@@ -120,5 +155,6 @@ class DemoApplicationTests {
 
 		Assertions.assertEquals(expected, result);
 	}
+
 	// FIN PRUEBAS UNITARIAS
 }
